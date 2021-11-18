@@ -11,6 +11,11 @@ app.use(express.static('public'));
 wax.on(hbs.handlebars);
 wax.setLayoutPath('./views/layouts'); // inform wax-on where to find the layout files
 
+// enable form processing
+app.use(express.urlencoded({
+    'extended': false
+}))
+
 // 2. define the routes
 app.get('/', function(req,res){
     res.render('home');
@@ -22,6 +27,11 @@ app.get('/about', function(req,res){
 
 app.get('/contact-us', function(req,res){
     res.render('contact-us')
+})
+
+app.post('/contact-us', function(req,res){
+    console.log(req.body);
+    res.send("form recieved");
 })
 
 app.get('/menu', function(req,res){

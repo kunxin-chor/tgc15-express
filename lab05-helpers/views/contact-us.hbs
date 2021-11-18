@@ -4,13 +4,23 @@
 <h1>Contact Us</h1>
 <form method="POST">
     <div>
-        <label>Email</label>
-        <input type="text" class="form-control"/>
+        <label>Email:</label>
+        <input type="text" name="email" class="form-control"/>
     </div>
     <div>
         <label>Comments</label>
-        <textarea class="form-control"></textarea>
+        <textarea name="comments" class="form-control"></textarea>
     </div>
+
+    <div>
+        <label>Type of Enquiry</label>
+        <div class="form-control">
+            <input type="radio" name="enquiry" value="opening"/><label class="mx-1">Opening hours</label>
+            <input type="radio" name="enquiry" value="reservations"/><label class="mx-1">Reservations</label>
+            <input type="radio" name="enquiry" value="miscellanous"/><label class="mx-1">Miscellanous</label>
+        </div>
+    </div>
+
     <input type="submit" class="btn btn-primary my-3"/>
 
 </form>
