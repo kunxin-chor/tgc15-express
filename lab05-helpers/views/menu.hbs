@@ -1,0 +1,40 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<h1>Menu</h1>
+
+{{#if promotion}}
+<div class="alert alert-success">
+    All sets at 20% off! Well stock last!
+</div>
+{{else}}
+<div class="alert alert-danger">
+    Please do not expect any discount
+</div>
+{{/if}}
+
+<h2>Days we are opened</h2>
+We are opened from 1pm to 7pm on those days:
+<ul class="list-group">
+    {{#each daysOpen}}
+    <li class="list-group-item">{{this}}</li>
+    {{/each}}
+</ul>
+
+<h2>Chef's Special</h2>
+<div style="display:flex; flex-direction: row">
+    {{#each menu}}
+    <div class="card my-3 mx-3" style="width: 18rem;">
+        <img class="card-img-top" src="{{this.image}}" alt="Card image cap">
+        <div class="card-body">
+            <h5 class="card-title">{{this.name}}</h5>
+            <p class="card-text">{{this.desc}}</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+    {{/each}}
+</div>
+
+{{/block}}
+
+{{/extends}}
