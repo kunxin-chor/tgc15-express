@@ -31,6 +31,18 @@ app.get('/contact-us', function(req,res){
 
 app.post('/contact-us', function(req,res){
     console.log(req.body);
+    let hearAbout = [];
+    // check if hear_about exists in req.body
+    if (req.body.hear_about) {
+        if (!Array.isArray(req.body.hear_about)) {
+            // if hearAbout is not undefined but not an array
+            // it has to be a string
+            hearAbout.push(req.body.hear_about)
+        } else {
+            hearAbout = req.body.hear_about;
+        }
+    }
+    console.log("hearAbout =>", hearAbout);
     res.send("form recieved");
 })
 
