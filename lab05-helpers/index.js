@@ -70,7 +70,20 @@ app.get('/menu', function(req,res){
     })
 })
 
+// display the BMI form
+app.get('/bmi', function(req,res){
+    res.render('bmi_form')
+})
 
+// process the BMI form
+app.post('/bmi', function(req,res){
+    let weight = parseFloat(req.body.weight);
+    let height = parseFloat(req.body.height);
+    let bmi = weight / (height**2);
+    res.render("bmi_results", {
+        'bmi': bmi
+    })
+})
 
 // 3. start the server
 app.listen(3000, function(){
