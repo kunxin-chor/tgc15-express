@@ -10,6 +10,23 @@
         <label>Height</label>
         <input type="text" value="" name="height" class="form-control"/>
     </div>
+    <div>
+        <label>Calculation method:</label>
+        <input type="radio" name="formula" value="si" /><label>SI units</label>
+        <input type="radio" name="formula" value="imperial"/><label>Imperial</label>
+    </div>
+    <div>
+        <label>What health issues worry you the most?</label>
+        <input type='checkbox' name='worries' value="high_blood_pressure"/>
+        <label>High Blood Pressure</label>
+        <input type='checkbox' name='worries' value="diabetes"/>
+        <label>Diabetes</label>
+        <input type='checkbox' name='worries' value="weight_management"/>
+        <label>Weight Management</label>
+        <input type='checkbox' name='worries' value="others"/>
+        <label>others</label>
+    </div>
+
     <input type="submit" class="btn btn-primary my-3"/>
 </form>
 {{/block}}

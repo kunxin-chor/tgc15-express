@@ -79,9 +79,32 @@ app.get('/bmi', function(req,res){
 app.post('/bmi', function(req,res){
     let weight = parseFloat(req.body.weight);
     let height = parseFloat(req.body.height);
-    let bmi = weight / (height**2);
+    let bmi = 0;
+    if (req.body.formula == "si") {
+        bmi = weight / (height**2);
+    } else {
+        bmi = weight / (height**2) * 703;
+    }
+
+    let worries = req.body.worries;
+    if (! worries) {
+        worries = [];
+    } else {
+        if (! Array.isArray(worries)) {
+            worries = [ worries ];
+        } 
+    }
+
+    // net result:
+    // the `worries` variable will be
+    // 1. an empty array if the user never checks any checkboxes
+    // 2. an array of one string if the user checks only ONE checkbox
+    // 3. an array of many strings if the user checks MANY checkboxes
+    console.log(worries);
+
     res.render("bmi_results", {
-        'bmi': bmi
+        'bmi': bmi,
+        'worries':worries
     })
 })
 

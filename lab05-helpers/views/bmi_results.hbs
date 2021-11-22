@@ -2,6 +2,15 @@
 
 {{#block "content"}}
 <h1>Your BMI is {{bmi}}</h1>
+
+{{#if worries}}
+<h2>Your health concerns are:</h2>
+<ul>
+    {{#each worries}}
+        <li>{{this}}</li>
+    {{/each}}
+</ul>
+{{/if}}
 {{/block}}
 
 {{/extends}}
