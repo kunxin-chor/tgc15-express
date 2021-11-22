@@ -95,6 +95,19 @@ app.post('/bmi', function(req,res){
         } 
     }
 
+    let lookup = {
+        'high_blood_pressure' : 'Высокое кровяное давление',
+        'diabetes': 'Diabetes',
+        'weight_management': 'Weight Management',
+        'others': 'Others'
+    }
+
+    let worriesForDisplay = [];
+    for (let w of worries) {
+        worriesForDisplay.push(lookup[w])
+    }
+   
+
     // net result:
     // the `worries` variable will be
     // 1. an empty array if the user never checks any checkboxes
@@ -104,7 +117,7 @@ app.post('/bmi', function(req,res){
 
     res.render("bmi_results", {
         'bmi': bmi,
-        'worries':worries
+        'worries':worriesForDisplay
     })
 })
 
