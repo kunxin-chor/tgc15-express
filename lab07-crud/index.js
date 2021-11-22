@@ -32,6 +32,25 @@ app.get('/', async function(req,res){
     })
 })
 
+// route is to render the form
+app.get('/create_sighting',  function(req,res){
+    res.render('create_sighting');
+})
+
+// route is to process the form
+app.post('/create_sighting', async function(req,res){
+    let food = req.body.food.split(',');
+    let description = req.body.description;
+    let datetime = req.body.datetime;
+    await axios.post(API_BASE_URL + "sighting",{
+        "description": description,
+        "food": food,
+        "datetime": datetime
+    });
+    res.redirect('/');
+
+})
+
 // LISTEN
 app.listen(3000, ()=>{
     console.log("Server started");
