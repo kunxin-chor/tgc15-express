@@ -74,6 +74,25 @@ app.post('/update_sighting/:sighting_id', async function(req,res){
     res.redirect('/')
 })
 
+app.get('/delete_sighting/:sighting_id', async function(req,res){
+    // retrieve the sighting id from the url parameters
+    let sightingId = req.params.sighting_id;
+
+    // retrieve information of the sighting using the api
+    let response = await axios.get(API_BASE_URL + "sighting/" + sightingId);
+    let sighting = response.data;
+
+    res.render('delete_sighting', {
+        'sighting': sighting
+    })
+})
+
+app.post('/delete_sighting/:sighting_id', async function(req,res){
+    let sightingId = req.params.sighting_id;
+    await axios.delete(API_BASE_URL + "sighting/" + sightingId);
+    res.redirect('/');
+})
+
 // LISTEN
 app.listen(3000, ()=>{
     console.log("Server started");

@@ -19,7 +19,10 @@
             <td>{{this.description}}</td>
             <td>{{this.food}}</td>
             <td>{{this.datetime}}</td>
-            <td><a class="btn btn-primary btn-sm" href="/update_sighting/{{this._id}}">Update</a></td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="/update_sighting/{{this._id}}">Update</a>
+                <a class="btn btn-danger btn-sm" href="/delete_sighting/{{this._id}}">Delete</a>
+            </td>
         </tr>
     {{/each}}
 </table>
