@@ -9,7 +9,8 @@
             <th>ID</th>
             <th>Description</th>
             <th>Food</th>
-            <th>Date/Time<th></th>
+            <th>Date/Time</th>
+            <th></th>
         </tr>
     </thead>
     {{#each sightings}}
@@ -18,6 +19,7 @@
             <td>{{this.description}}</td>
             <td>{{this.food}}</td>
             <td>{{this.datetime}}</td>
+            <td><a class="btn btn-primary btn-sm" href="/update_sighting/{{this._id}}">Update</a></td>
         </tr>
     {{/each}}
 </table>

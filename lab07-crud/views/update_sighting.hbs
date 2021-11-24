@@ -1,0 +1,34 @@
+{{#extends 'base'}}
+
+{{#block 'content'}}
+<h1>Update Food Sighting</h1>
+<form method="POST">
+    <div>
+        <label>Description</label>
+        <input type="text" name="description" class="form-control" value="{{sighting.description}}"/>
+    </div>
+    <div>
+        <label>Food</label>
+        <input type="text" 
+               name="food"
+               placeholder="Enter the food items seperated by commas"
+               class="form-control"
+               value="{{sighting.food}}"
+               />
+    </div>
+    <div>
+        <label>Date Time</label>
+        <input type="datetime-local" 
+               name="datetime" 
+               class="form-control"
+               value="{{sighting.datetime}}"
+               >
+    </div>
+    <input type="submit" class="btn btn-primary my-3"/>
+
+
+</form>
+
+{{/block}}
+
+{{/extends}}

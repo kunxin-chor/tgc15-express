@@ -51,6 +51,18 @@ app.post('/create_sighting', async function(req,res){
 
 })
 
+app.get("/update_sighting/:sighting_id", async function(req,res){
+    let sightingId = req.params.sighting_id;
+    // In the API endpoint, there is a endpoint which is:
+    // GET sighting/<id of the object>
+    let response = await axios.get(API_BASE_URL + "sighting/" + sightingId);
+    let sighting = response.data;
+    sighting.datetime = sighting.datetime.slice(0, -1);
+    res.render('update_sighting',{
+        'sighting': sighting
+    })
+})
+
 // LISTEN
 app.listen(3000, ()=>{
     console.log("Server started");
