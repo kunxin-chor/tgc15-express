@@ -63,6 +63,17 @@ app.get("/update_sighting/:sighting_id", async function(req,res){
     })
 })
 
+app.post('/update_sighting/:sighting_id', async function(req,res){
+    let sightingId = req.params.sighting_id;
+    let updatedFoodSighting = {
+        'description': req.body.description,
+        'food': req.body.food.split(','),
+        'datetime': req.body.datetime
+    }
+    await axios.put(API_BASE_URL + 'sighting/' + sightingId, updatedFoodSighting);
+    res.redirect('/')
+})
+
 // LISTEN
 app.listen(3000, ()=>{
     console.log("Server started");
