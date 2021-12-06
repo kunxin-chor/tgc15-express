@@ -119,6 +119,56 @@ async function main() {
         });
         res.redirect('/');
     })
+
+    app.get('/food_record/:id/delete', async function(req,res){
+        // retrieve from the mongo db the document with the same req.params.id
+        const db = MongoUtil.getDB();
+        const documentToDelete = await db.collection('food_records').findOne({
+            '_id': ObjectId(req.params.id)            
+        })
+
+        res.render('confirm_delete_food_record',{
+            'foodRecord': documentToDelete
+        })
+    })
+
+    app.post('/food_record/:id/delete', async function(req,res){
+        const db = MongoUtil.getDB();
+        await db.collection('food_records').deleteOne({
+            '_id': ObjectId(req.params.id)
+        })
+        res.redirect('/')
+    })
+
+    app.get('/food_record/:id/note/add', async function(req,res){
+        const db = MongoUtil.getDB();
+        let foodRecord = await db.collection('food_records').findOne({
+            '_id': ObjectId(req.params.id)
+        });
+        res.render('add_note',{
+            'foodRecord': foodRecord
+        })
+    })
+
+    app.post('/food_record/:id/note/add', async function(req,res){
+        const db = MongoUtil.getDB();
+        let noteContent = req.body.note;
+
+        let newNote = {
+            '_id': ObjectId(), // create a new ObjectId
+            'content': noteContent
+        }
+
+        await db.collection('food_records').updateOne({
+            '_id': ObjectId(req.params.id),
+        },{
+            '$push': {
+                'notes': newNote
+            }
+        })
+
+        res.redirect('/')
+    })
 }
 main();
 
