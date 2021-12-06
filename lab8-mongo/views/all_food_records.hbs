@@ -1,0 +1,26 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<h1>Food Records <a href="/food_record/add" class="btn btn-primary">Add</a></h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Calories</th>
+            <th>tags</th>
+            <th></th>
+        </tr>
+    </thead>
+    {{#each foodRecords}}
+    <tr>
+        <td>{{this.foodName}}</td>
+        <td>{{this.calories}}</td>
+        <td>{{this.tags}}</td>
+        <td><a href="/food_record/{{this._id}}/update" class="btn btn-primary btn-sm">Update</a></td>
+    </tr>
+    {{/each}}
+
+</table>
+{{/block}}
+
+{{/extends}}
