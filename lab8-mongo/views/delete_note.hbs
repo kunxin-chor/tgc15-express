@@ -1,0 +1,19 @@
+{{#extends 'base'}}
+
+{{#block "content"}}
+<h1>Delete Note</h1>
+<form method="POST">
+    <div class='alert alert-danger'>
+        Are you sure you want to delete the note:
+        <div class="card">
+            <div class="card-body">
+                {{note.content}}
+            </div>
+        </div>
+    </div>
+    <input type="submit" class="btn btn-danger" value="Confirm">
+    <a href="" class="btn btn-success">Cancel</a>
+</form>
+{{/block}}
+
+{{/extends}}

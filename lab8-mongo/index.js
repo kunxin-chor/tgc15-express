@@ -30,6 +30,43 @@ app.use(express.urlencoded({
     'extended': false
 }))
 
+async function getNoteByID(noteid) {
+    const db = MongoUtil.getDB();
+    let results = await db.collection('food_records').findOne({
+        'notes._id': ObjectId(noteid)
+    }, 
+    // second argument to the findOne function allows us to provide an object with options
+    {
+        'projection': { 
+            // projection is to select which keys of the document to show
+            'notes': {
+                '$elemMatch':{
+                    '_id': ObjectId(noteid) // only show the element from the notes array where its _id matches
+                                                       // the provided noteid
+                }
+            }
+        }
+    });
+    return results.notes[0];
+}
+
+async function getFoodRecordByNote(noteid){
+    const db = MongoUtil.getDB();
+    let foodRecord = await db.collection('food_records').findOne({
+        'notes._id': ObjectId(noteid)
+    })
+    return foodRecord;
+
+}
+
+async function getFoodRecordById(id) {
+    const db = MongoUtil.getDB();
+    let foodRecord = await db.collection('food_records').findOne({
+        '_id': ObjectId(id)            
+    })
+    return foodRecord;
+}
+
 async function main() {
     await MongoUtil.connect(MONGO_URI, "tgc15_cico");
    
@@ -87,9 +124,7 @@ async function main() {
         let id = req.params.id;
         const db = MongoUtil.getDB();
         // use .findOne to find only one document
-        let foodRecordToBeEdited = await db.collection('food_records').findOne({
-            '_id': ObjectId(id)
-        })
+        let foodRecordToBeEdited = await getFoodRecordById(req.params.id);
     
         // display the extisting details in the form
         res.render('update_food_record',{
@@ -124,9 +159,7 @@ async function main() {
     app.get('/food_record/:id/delete', async function(req,res){
         // retrieve from the mongo db the document with the same req.params.id
         const db = MongoUtil.getDB();
-        const documentToDelete = await db.collection('food_records').findOne({
-            '_id': ObjectId(req.params.id)            
-        })
+        const documentToDelete = await getFoodRecordById(req.params.id);
 
         res.render('confirm_delete_food_record',{
             'foodRecord': documentToDelete
@@ -189,23 +222,9 @@ async function main() {
 
         const db = MongoUtil.getDB();
         // find the main document which notes array contains the note id that we are looking for
-        let results = await db.collection('food_records').findOne({
-            'notes._id': ObjectId(req.params.noteid)
-        }, 
-        // second argument to the findOne function allows us to provide an object with options
-        {
-            'projection': { 
-                // projection is to select which keys of the document to show
-                'notes': {
-                    '$elemMatch':{
-                        '_id': ObjectId(req.params.noteid) // only show the element from the notes array where its _id matches
-                                                           // the provided noteid
-                    }
-                }
-            }
-        });
+        let results = await getNoteByID(req.params.noteid);
         res.render('update_note',{
-            'note': results.notes[0]
+            'note': results
         })
     })
 
@@ -228,6 +247,30 @@ async function main() {
         })
         res.redirect('/food_record/'+ record._id+'/notes');
     })
+
+    app.get('/note/:noteid/delete', async function(req,res){
+        // retrieve the content of the note that we want to delete
+        let noteToDelete = await getNoteByID(req.params.noteid);
+        res.render('delete_note',{
+            'note': noteToDelete
+        })       
+    })
+
+    app.post('/note/:noteid/delete', async function(req,res){
+      let foodRecord = await getFoodRecordByNote(req.params.noteid);
+      const db = MongoUtil.getDB();
+      await db.collection('food_records').updateOne({
+          '_id': ObjectId(foodRecord._id)
+      },{
+          '$pull':{
+              'notes': {
+                  '_id': ObjectId(req.params.noteid)
+              }
+          }
+      })
+      res.redirect('/food_record/' + foodRecord._id + '/notes');
+    });
+   
 }
 main();
 
