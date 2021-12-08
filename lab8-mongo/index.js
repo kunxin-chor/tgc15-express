@@ -12,7 +12,8 @@ const waxOn = require('wax-on');
 require('dotenv').config();
 
 // import in the MongoUtil object
-const MongoUtil = require('./MongoUtil')
+const MongoUtil = require('./MongoUtil');
+const { ReadPreferenceMode } = require('mongodb');
 
 // process is an object available to Nodejs program
 // it represents the current running program
@@ -167,7 +168,65 @@ async function main() {
             }
         })
 
-        res.redirect('/')
+        res.redirect('/food_record/'+req.params.id+'/notes')
+    })
+
+    app.get('/food_record/:id/notes', async function(req,res){
+        const db = MongoUtil.getDB();
+        let foodRecord = await db.collection('food_records').findOne({
+            '_id':ObjectId(req.params.id)
+        });
+        res.render('food_details',{
+            'foodRecord': foodRecord
+        })
+    })
+
+    // edit a note attached to an existing food record document
+    app.get('/note/:noteid/update', async function(req,res){
+
+        // to select or to retrieve a sub-document
+        // step 1. select the main document that the sub-document belongs to
+
+        const db = MongoUtil.getDB();
+        // find the main document which notes array contains the note id that we are looking for
+        let results = await db.collection('food_records').findOne({
+            'notes._id': ObjectId(req.params.noteid)
+        }, 
+        // second argument to the findOne function allows us to provide an object with options
+        {
+            'projection': { 
+                // projection is to select which keys of the document to show
+                'notes': {
+                    '$elemMatch':{
+                        '_id': ObjectId(req.params.noteid) // only show the element from the notes array where its _id matches
+                                                           // the provided noteid
+                    }
+                }
+            }
+        });
+        res.render('update_note',{
+            'note': results.notes[0]
+        })
+    })
+
+    app.post('/note/:noteid/update', async function(req,res){
+        const db = MongoUtil.getDB();
+        // update the foodRecord where its notes array contain an object that matches
+        // req.params.noteid
+
+        let record = await db.collection('food_records').findOne({
+            'notes._id': ObjectId(req.params.noteid)
+        });
+
+        await db.collection('food_records').updateOne({
+            'notes._id': ObjectId(req.params.noteid)
+        },{
+            '$set': {
+                'notes.$.content': req.body.content // $ refers to the index of the element
+                                                    // where its _id matches req.params.noteid
+            }
+        })
+        res.redirect('/food_record/'+ record._id+'/notes');
     })
 }
 main();
