@@ -74,8 +74,14 @@ async function main() {
       const db = MongoUtil.getDB();
 
       // fetch all the documents from the food_records collection
-      let foodRecords = await db.collection('food_records').find({}).toArray();
-
+      let foodRecords = await db.collection('food_records').find({},{
+          'projection': {
+              'foodName': 1,
+              'calories': 1,
+              'tags': 1
+          }
+      }).toArray();
+      console.log(foodRecords);
       res.render('all_food_records',{
           'foodRecords': foodRecords
       })
